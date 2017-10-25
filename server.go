@@ -1,15 +1,30 @@
 package main
 
 import (
-"net/http"
-
-"github.com/labstack/echo"
+	"github.com/labstack/echo"
+	"bitcoin-price-server/controllers"
+	"bitcoin-price-server/exchanges"
+	"bitcoin-price-server/models"
+	"time"
 )
 
 func main() {
+	var price controllers.BitcoinPrice;
+
+	c,_ := models.New();
+
+	go getPrices(c,&price)
+
 	e := echo.New()
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
+	e.GET("/bitcoin-price",controllers.GetBitcoinPrice(&price));
 	e.Logger.Fatal(e.Start(":1323"))
+
+}
+
+func getPrices(c *models.Client, price *controllers.BitcoinPrice){
+	for range time.Tick(time.Second *30){
+		exchanges.GetZebpayPrice(c,price);
+		exchanges.GetCoinSecurePrice(c,price);
+		exchanges.GetPocketBitsPrice(c,price);
+	}
 }
