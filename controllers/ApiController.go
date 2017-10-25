@@ -11,6 +11,7 @@ type BitcoinPrice struct {
 	ZebpaySellPrice float64 `json:"zebpaySellPrice"`
 	PocketBitsBuyPrice float64 `json:"pocketBitsBuyPrice"`
 	PocketBitsSellPrice float64 `json:"pocketBitsSellPrice"`
+	UsdRate float64 `json:"usd_rate"`
 }
 
 

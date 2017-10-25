@@ -32,4 +32,5 @@ func getBitcoinPrices(c *models.Client, price *controllers.BitcoinPrice) {
 	exchanges.GetZebpayPrice(c,price);
 	exchanges.GetCoinSecurePrice(c,price);
 	exchanges.GetPocketBitsPrice(c,price);
+	exchanges.GetUSDRate(c,price);
 }
