@@ -5,12 +5,12 @@ import (
 )
 
 type BitcoinPrice struct {
-	CoinSecureBuyPrice float64
-	CoinSecureSellPrice float64``
-	ZebpayBuyPrice float64
-	ZebpaySellPrice float64
-	PocketBitsBuyPrice float64
-	PocketBitsSellPrice float64
+	CoinSecureBuyPrice float64 `json:"coinsecureBuyPrice"`
+	CoinSecureSellPrice float64 `json:"coinsecureSellPrice"`
+	ZebpayBuyPrice float64 `json:"zebpayBuyPrice"`
+	ZebpaySellPrice float64 `json:"zebpaySellPrice"`
+	PocketBitsBuyPrice float64 `json:"pocketBitsBuyPrice"`
+	PocketBitsSellPrice float64 `json:"pocketBitsSellPrice"`
 }
 
 

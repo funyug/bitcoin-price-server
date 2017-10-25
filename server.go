@@ -9,10 +9,11 @@ import (
 )
 
 func main() {
-	var price controllers.BitcoinPrice;
+	price := controllers.BitcoinPrice{ CoinSecureBuyPrice:100};
 
 	c,_ := models.New();
 
+	getBitcoinPrices(c,&price);
 	go getPrices(c,&price)
 
 	e := echo.New()
@@ -23,8 +24,12 @@ func main() {
 
 func getPrices(c *models.Client, price *controllers.BitcoinPrice){
 	for range time.Tick(time.Second *30){
-		exchanges.GetZebpayPrice(c,price);
-		exchanges.GetCoinSecurePrice(c,price);
-		exchanges.GetPocketBitsPrice(c,price);
+		getBitcoinPrices(c,price);
 	}
+}
+
+func getBitcoinPrices(c *models.Client, price *controllers.BitcoinPrice) {
+	exchanges.GetZebpayPrice(c,price);
+	exchanges.GetCoinSecurePrice(c,price);
+	exchanges.GetPocketBitsPrice(c,price);
 }
