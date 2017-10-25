@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	price := controllers.BitcoinPrice{ CoinSecureBuyPrice:100};
+	price := controllers.BitcoinPrice{ };
 
 	c,_ := models.New();
 
