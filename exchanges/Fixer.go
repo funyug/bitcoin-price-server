@@ -16,7 +16,7 @@ type Rate struct {
 
 func GetUSDRate(c *models.Client, price *controllers.BitcoinPrice) {
 	rsp := &Fixer{}
-	e := c.LoadResponse("https://api.fixer.io/latest?base=USD",rsp)
+	e := c.LoadResponse("GET","https://api.fixer.io/latest?base=USD",rsp)
 	if(e != nil) {
 		fmt.Print(e)
 	} else {

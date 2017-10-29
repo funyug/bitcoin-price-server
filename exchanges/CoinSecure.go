@@ -17,7 +17,7 @@ type Message struct {
 
 func GetCoinSecurePrice(c *models.Client, price *controllers.BitcoinPrice) {
 	rsp := &CoinSecure{}
-	e := c.LoadResponse("https://api.coinsecure.in/v1/exchange/ticker",rsp)
+	e := c.LoadResponse("GET","https://api.coinsecure.in/v1/exchange/ticker",rsp)
 	if(e != nil) {
 		fmt.Print(e)
 	} else {

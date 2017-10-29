@@ -16,7 +16,7 @@ type Zebpay struct {
 
 func GetZebpayPrice(c *models.Client, price *controllers.BitcoinPrice) {
 	rsp := &Zebpay{}
-	e := c.LoadResponse("https://api.zebpay.com/api/v1/ticker?currencyCode=INR",rsp)
+	e := c.LoadResponse("GET","https://api.zebpay.com/api/v1/ticker?currencyCode=INR",rsp)
 	if(e != nil) {
 		fmt.Print(e)
 	} else {

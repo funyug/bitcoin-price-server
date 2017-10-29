@@ -13,7 +13,7 @@ type PocketBits struct {
 
 func GetPocketBitsPrice(c *models.Client, price *controllers.BitcoinPrice) {
 	rsp := &PocketBits{}
-	e := c.LoadResponse("https://www.pocketbits.co.in/Index/getBTCRate",rsp)
+	e := c.LoadResponse("GET","https://www.pocketbits.co.in/Index/getBTCRate",rsp)
 	if(e != nil) {
 		fmt.Print(e)
 	} else {

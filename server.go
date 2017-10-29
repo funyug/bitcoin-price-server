@@ -15,7 +15,7 @@ func main() {
 	c,_ := models.New();
 
 	getBitcoinPrices(c,&price,[]string{});
-	go getPrices(c,&price,30,[]string{"Zebpay","PocketBits"});
+	go getPrices(c,&price,30,[]string{"Zebpay","PocketBits","Koinex"});
 	go getPrices(c,&price,60,[]string{"Coinsecure"});
 	go getPrices(c,&price,600,[]string{"USDRate"});
 
@@ -42,6 +42,7 @@ func getBitcoinPrices(c *models.Client, price *controllers.BitcoinPrice, exchang
 		exchanges.GetZebpayPrice(c,price);
 		exchanges.GetCoinSecurePrice(c,price);
 		exchanges.GetPocketBitsPrice(c,price);
+		exchanges.GetKoinexPrice(c,price);
 		exchanges.GetUSDRate(c,price);
 	} else {
 		for _, v := range exchanges_arr {
@@ -51,6 +52,8 @@ func getBitcoinPrices(c *models.Client, price *controllers.BitcoinPrice, exchang
 				exchanges.GetPocketBitsPrice(c,price);
 			} else if v == "Zebpay" {
 				exchanges.GetZebpayPrice(c,price);
+			} else if v == "Koinex" {
+				exchanges.GetKoinexPrice(c,price);
 			} else if v == "USDRate" {
 				exchanges.GetUSDRate(c,price);
 			}

@@ -11,11 +11,16 @@ type Client struct {
 	*http.Client
 }
 
-func (c *Client) LoadResponse(path string, i interface{}) error {
+func (c *Client) LoadResponse(method string, path string, i interface{}) error {
 	full_path := path
 
 	fmt.Println("querying..." + full_path)
-	rsp, e := c.Get(full_path)
+	req, e := http.NewRequest(method,path,nil)
+	req.Header.Set("accept", "application/json")
+	if e != nil {
+		return e
+	}
+	rsp ,e := c.Do(req)
 	if e != nil {
 		return e
 	}
