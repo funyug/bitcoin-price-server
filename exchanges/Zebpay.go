@@ -2,8 +2,8 @@ package exchanges
 
 import (
 	"fmt"
-	"bitcoin-price-server/models"
-	"bitcoin-price-server/controllers"
+	"github.com/funyug/bitcoin-price-server/models"
+	"github.com/funyug/bitcoin-price-server/controllers"
 )
 
 type Zebpay struct {

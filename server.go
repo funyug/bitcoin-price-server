@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/labstack/echo"
-	"bitcoin-price-server/controllers"
-	"bitcoin-price-server/exchanges"
-	"bitcoin-price-server/models"
+	"github.com/funyug/bitcoin-price-server/controllers"
+	"github.com/funyug/bitcoin-price-server/exchanges"
+	"github.com/funyug/bitcoin-price-server/models"
 	"github.com/labstack/echo/middleware"
 	"time"
 )
@@ -27,7 +27,7 @@ func main() {
 		AllowMethods: []string{echo.GET, echo.PUT, echo.POST, echo.DELETE},
 	}));
 	e.GET("/bitcoin-price",controllers.GetBitcoinPrice(&price));
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(":3001"))
 
 }
 
