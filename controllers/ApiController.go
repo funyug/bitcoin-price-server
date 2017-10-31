@@ -25,10 +25,18 @@ func GetBitcoinPrice(price *BitcoinPrice) echo.HandlerFunc {
 	}
 }
 
-func GetAlerts(db *gorm.DB)  echo.HandlerFunc {
+func GetAlerts(db *gorm.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		device_id := c.QueryParam("device_id")
 		alerts := models.GetAlerts(db, device_id)
+		return c.JSON(200,alerts)
+	}
+}
+
+func PostAlert(db *gorm.DB) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		//TODO: Add Validator
+		alerts := models.PostAlert(db, c.Request())
 		return c.JSON(200,alerts)
 	}
 }

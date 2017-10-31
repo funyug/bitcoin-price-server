@@ -12,11 +12,8 @@ import (
 )
 
 func main() {
-	db, err := gorm.Open("mysql", "root:@/bitcoin_price")
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
+	var db *gorm.DB;
+	models.InitDB(db);
 
 	price := controllers.BitcoinPrice{ };
 
@@ -36,6 +33,7 @@ func main() {
 	}));
 	e.GET("/bitcoin-price",controllers.GetBitcoinPrice(&price));
 	e.GET("/alerts",controllers.GetAlerts(db));
+	e.POST("/alerts",controllers.PostAlert(db));
 	e.Logger.Fatal(e.Start(":3001"))
 
 }
