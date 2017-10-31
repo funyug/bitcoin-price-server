@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"github.com/labstack/echo"
+	"github.com/jinzhu/gorm"
+	"github.com/funyug/bitcoin-price-server/models"
 )
 
 type BitcoinPrice struct {
@@ -20,5 +22,13 @@ type BitcoinPrice struct {
 func GetBitcoinPrice(price *BitcoinPrice) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		return c.JSON(200, price)
+	}
+}
+
+func GetAlerts(db *gorm.DB)  echo.HandlerFunc {
+	return func(c echo.Context) error {
+		device_id := c.QueryParam("device_id")
+		alerts := models.GetAlerts(db, device_id)
+		return c.JSON(200,alerts)
 	}
 }
