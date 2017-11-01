@@ -7,22 +7,24 @@ import (
 	"github.com/funyug/bitcoin-price-server/models"
 	"github.com/labstack/echo/middleware"
 	"time"
-	"github.com/jinzhu/gorm"
 	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
-	var db *gorm.DB;
-	models.InitDB(db);
+	db, err := models.InitDB();
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
 
 	price := controllers.BitcoinPrice{ };
 
-	/*c,_ := models.New();
+	c,_ := models.New();
 
 	getBitcoinPrices(c,&price,[]string{});
 	go getPrices(c,&price,30,[]string{"Zebpay","PocketBits","Koinex"});
 	go getPrices(c,&price,60,[]string{"Coinsecure"});
-	go getPrices(c,&price,600,[]string{"USDRate"});*/
+	go getPrices(c,&price,600,[]string{"USDRate"});
 
 	e := echo.New();
 	e.Use(middleware.Logger());
