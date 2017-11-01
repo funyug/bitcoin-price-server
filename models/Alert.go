@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"io/ioutil"
 	"encoding/json"
+	"github.com/pkg/errors"
 )
 
 type Alert struct {
@@ -14,14 +15,17 @@ type Alert struct {
 	Device_id string
 }
 
-func GetAlerts(db *gorm.DB, device_id string) []Alert {
+func GetAlerts(db *gorm.DB, device_id string) ([]Alert, error) {
 	alerts := []Alert{};
-	id := GetDevice(db, device_id)
-	db.Where("device_id = ?",id).Find(&alerts);
-	return alerts
+	device := GetDevice(db, device_id)
+	if device.Id != 0 {
+		db.Where("device_id = ?",device.Device_id).Find(&alerts);
+		return alerts,nil
+	}
+	return []Alert{}, errors.New("Device not found")
 }
 
-func PostAlert(db *gorm.DB, request *http.Request) []Alert {
+func PostAlert(db *gorm.DB, request *http.Request) ([]Alert, error) {
 	b, _ := ioutil.ReadAll(request.Body)
 	defer request.Body.Close()
 
@@ -29,9 +33,10 @@ func PostAlert(db *gorm.DB, request *http.Request) []Alert {
 	json.Unmarshal(b, &alert)
 
 	if alert.Device_id != "" {
+		FindOrCreate(db,alert.Device_id)
 		db.Create(&alert)
 	}
 
-	alerts := GetAlerts(db,alert.Device_id)
-	return alerts
+	alerts, err := GetAlerts(db,alert.Device_id)
+	return alerts, err
 }
