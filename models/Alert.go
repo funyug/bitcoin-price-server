@@ -40,3 +40,18 @@ func PostAlert(db *gorm.DB, request *http.Request) ([]Alert, error) {
 	alerts, err := GetAlerts(db,alert.Device_id)
 	return alerts, err
 }
+
+func DeleteAlert(db *gorm.DB, request *http.Request) ([]Alert, error) {
+	b, _ := ioutil.ReadAll(request.Body)
+	defer request.Body.Close()
+
+	alert := Alert{}
+	json.Unmarshal(b, &alert)
+
+	if alert.Id != 0 && alert.Device_id != "" {
+		db.Where("id = ? and device_id = ?",alert.Id,alert.Device_id).Delete(alert)
+	}
+
+	alerts, err := GetAlerts(db,alert.Device_id)
+	return alerts, err
+}

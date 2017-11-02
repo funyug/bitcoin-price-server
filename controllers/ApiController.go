@@ -46,3 +46,14 @@ func PostAlert(db *gorm.DB) echo.HandlerFunc {
 		return c.JSON(200,alerts)
 	}
 }
+
+func DeleteAlert(db *gorm.DB) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		//TODO: Add Validator
+		alerts, err := models.DeleteAlert(db, c.Request())
+		if err != nil {
+			return c.JSON(500,err)
+		}
+		return c.JSON(200,alerts)
+	}
+}
