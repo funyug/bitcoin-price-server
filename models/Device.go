@@ -6,7 +6,7 @@ import (
 
 type Device struct {
 	Id int
-	Device_id string
+	DeviceId string
 }
 
 func GetDevice(db *gorm.DB, device_id string) Device{
@@ -19,7 +19,7 @@ func FindOrCreate(db *gorm.DB, device_id string) Device {
 	device := GetDevice(db, device_id)
 
 	if device.Id == 0 {
-		device = Device{Device_id:device_id}
+		device = Device{DeviceId:device_id}
 		db.Create(&device)
 	}
 

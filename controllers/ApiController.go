@@ -30,9 +30,11 @@ func GetAlerts(db *gorm.DB) echo.HandlerFunc {
 		device_id := c.QueryParam("device_id")
 		alerts, err := models.GetAlerts(db, device_id)
 		if err != nil {
-			return c.JSON(500,err)
+			response := models.Fail(err)
+			return c.JSON(500,response)
 		}
-		return c.JSON(200,alerts)
+		response := models.Success(alerts)
+		return c.JSON(200,response)
 	}
 }
 
@@ -41,9 +43,11 @@ func PostAlert(db *gorm.DB) echo.HandlerFunc {
 		//TODO: Add Validator
 		alerts, err := models.PostAlert(db, c.Request())
 		if err != nil {
-			return c.JSON(500,err)
+			response := models.Fail(err)
+			return c.JSON(500,response)
 		}
-		return c.JSON(200,alerts)
+		response := models.Success(alerts)
+		return c.JSON(200,response)
 	}
 }
 
@@ -52,8 +56,10 @@ func DeleteAlert(db *gorm.DB) echo.HandlerFunc {
 		//TODO: Add Validator
 		alerts, err := models.DeleteAlert(db, c.Request())
 		if err != nil {
-			return c.JSON(500,err)
+			response := models.Fail(err)
+			return c.JSON(500,response)
 		}
-		return c.JSON(200,alerts)
+		response := models.Success(alerts)
+		return c.JSON(200,response)
 	}
 }
