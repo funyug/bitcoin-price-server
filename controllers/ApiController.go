@@ -40,7 +40,6 @@ func GetAlerts(db *gorm.DB) echo.HandlerFunc {
 
 func PostAlert(db *gorm.DB) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		//TODO: Add Validator
 		alerts, err := models.PostAlert(db, c.Request())
 		if err != nil {
 			response := models.Fail(err.Error())

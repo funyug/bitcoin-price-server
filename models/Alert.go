@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"encoding/json"
 	"github.com/pkg/errors"
+	"fmt"
 )
 
 type Alert struct {
@@ -33,17 +34,19 @@ func PostAlert(db *gorm.DB, request *http.Request) ([]Alert, error) {
 	alert := Alert{}
 	json.Unmarshal(b, &alert)
 
-	if alert.DeviceId != "" {
+	err := ValidatePostAlert(alert)
+	if err == nil {
 		FindOrCreate(db,alert.DeviceId)
 		alert.Id = 0
 		if alert.AlertType > 0 {
 			alert.AlertType = 1
 		}
 		db.Create(&alert)
+		alerts, err := GetAlerts(db,alert.DeviceId)
+		return alerts, err
 	}
 
-	alerts, err := GetAlerts(db,alert.DeviceId)
-	return alerts, err
+	return []Alert{}, err
 }
 
 func DeleteAlert(db *gorm.DB, request *http.Request) ([]Alert, error) {
@@ -53,10 +56,44 @@ func DeleteAlert(db *gorm.DB, request *http.Request) ([]Alert, error) {
 	alert := Alert{}
 	json.Unmarshal(b, &alert)
 
-	if alert.Id != 0 && alert.DeviceId != "" {
+	err := ValidateDeleteAlert(alert)
+	if err == nil {
 		db.Where("id = ? and device_id = ?",alert.Id,alert.DeviceId).Delete(alert)
+		alerts, err := GetAlerts(db,alert.DeviceId)
+		return alerts, err
 	}
 
-	alerts, err := GetAlerts(db,alert.DeviceId)
-	return alerts, err
+	return []Alert{}, err
+}
+
+func ValidatePostAlert(alert Alert) error{
+	if alert.DeviceId == "" {
+		err := errors.New("Device Id not found")
+		return err;
+	}
+	if alert.AlertPrice == 0 {
+		err := errors.New("Alert Price not found")
+		return err;
+	}
+	if alert.AlertType == 0 {
+		err := errors.New("Alert Type not found")
+		return err;
+	}
+	if alert.ExchangeId == 0 {
+		err := errors.New("Exchange Id not found")
+		return err;
+	}
+	return nil
+}
+
+func ValidateDeleteAlert(alert Alert) error{
+	if alert.DeviceId == "" {
+		err := errors.New("Device Id not found")
+		return err;
+	}
+	if alert.Id == 0 {
+		err := errors.New("Id not found")
+		return err;
+	}
+	return nil
 }
