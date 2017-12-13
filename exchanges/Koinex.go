@@ -29,6 +29,7 @@ func GetKoinexPrice(c *models.Client, price *controllers.BitcoinPrice) {
 		if(len(rsp.Buy_orders.Data) > 0 && len(rsp.Sell_orders.Data) > 0) {
 			price.KoinexSellPrice,_ = strconv.ParseFloat(rsp.Buy_orders.Data[0].Price_per_unit,64);
 			price.KoinexBuyPrice,_ = strconv.ParseFloat(rsp.Sell_orders.Data[0].Price_per_unit,64);
+			controllers.SendExchangeAlerts(2,price.KoinexBuyPrice,price.KoinexSellPrice);
 		}
 	}
 }

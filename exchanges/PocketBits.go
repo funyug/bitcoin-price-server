@@ -19,5 +19,6 @@ func GetPocketBitsPrice(c *models.Client, price *controllers.BitcoinPrice) {
 	} else {
 		price.PocketBitsBuyPrice = rsp.BTC_BuyingRate;
 		price.PocketBitsSellPrice = rsp.BTC_SellingRate;
+		controllers.SendExchangeAlerts(3,price.PocketBitsBuyPrice,price.PocketBitsSellPrice);
 	}
 }

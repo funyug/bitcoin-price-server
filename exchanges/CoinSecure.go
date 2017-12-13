@@ -23,5 +23,6 @@ func GetCoinSecurePrice(c *models.Client, price *controllers.BitcoinPrice) {
 	} else {
 		price.CoinSecureBuyPrice = rsp.Message.Ask/100;
 		price.CoinSecureSellPrice = rsp.Message.Bid/100;
+		controllers.SendExchangeAlerts(1,price.CoinSecureBuyPrice,price.CoinSecureSellPrice);
 	}
 }

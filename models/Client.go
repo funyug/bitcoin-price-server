@@ -32,7 +32,7 @@ func (c *Client) LoadResponse(method string, path string, i interface{}) error {
 		return e
 	}
 	if rsp.Status[0] != '2' {
-		return fmt.Errorf("expected status 2xx, got %s: %s", rsp.Status, string(b))
+		 return fmt.Errorf("expected status 2xx, got %s: %s", rsp.Status, string(b))
 	}
 
 	return json.Unmarshal(b, &i)

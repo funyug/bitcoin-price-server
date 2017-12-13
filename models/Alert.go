@@ -6,14 +6,14 @@ import (
 	"io/ioutil"
 	"encoding/json"
 	"github.com/pkg/errors"
-	"fmt"
 )
 
 type Alert struct {
 	Id int
 	ExchangeId int
 	AlertPrice float64
-	AlertType int
+	PriceType int
+	Operator int
 	DeviceId string
 }
 
@@ -38,8 +38,8 @@ func PostAlert(db *gorm.DB, request *http.Request) ([]Alert, error) {
 	if err == nil {
 		FindOrCreate(db,alert.DeviceId)
 		alert.Id = 0
-		if alert.AlertType > 0 {
-			alert.AlertType = 1
+		if alert.PriceType > 0 {
+			alert.PriceType = 1
 		}
 		db.Create(&alert)
 		alerts, err := GetAlerts(db,alert.DeviceId)
@@ -73,10 +73,6 @@ func ValidatePostAlert(alert Alert) error{
 	}
 	if alert.AlertPrice == 0 {
 		err := errors.New("Alert Price not found")
-		return err;
-	}
-	if alert.AlertType == 0 {
-		err := errors.New("Alert Type not found")
 		return err;
 	}
 	if alert.ExchangeId == 0 {
