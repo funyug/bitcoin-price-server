@@ -37,8 +37,7 @@ func main() {
 	e.GET("/alerts",controllers.GetAlerts(db));
 	e.POST("/alerts",controllers.PostAlert(db));
 	e.DELETE("/alerts",controllers.DeleteAlert(db));
-
-	e.Logger.Fatal(e.Start(":3001"))
+	e.Logger.Fatal(e.Start(":3002"))
 
 }
 
