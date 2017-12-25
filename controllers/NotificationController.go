@@ -4,7 +4,6 @@ import (
 	"gopkg.in/maddevsio/fcm.v1"
 	"fmt"
 	"github.com/funyug/bitcoin-price-server/models"
-	"github.com/jinzhu/gorm"
 	"strconv"
 )
 
@@ -29,7 +28,13 @@ func SendNotification(token string,title string,body string) {
 	fmt.Println("Success       :", response.Success)
 }
 
-func SendAlerts(db *gorm.DB, alerts []models.Alert, exchange int, price int64 ) {
+func SendAlerts(alerts []models.Alert, exchange int, price int64 ) {
+	db, err := models.InitDB();
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+
 	var exchange_name string;
 	for i:=0;i<len(alerts);i++ {
 		if exchange == 1 {
@@ -41,7 +46,7 @@ func SendAlerts(db *gorm.DB, alerts []models.Alert, exchange int, price int64 ) 
 		} else if exchange == 4 {
 			exchange_name = "Zebpay"
 		}
-		db.Debug().Delete(&alerts[i]);
+		db.Delete(&alerts[i]);
 		SendNotification(alerts[i].DeviceId,"Price Alert",exchange_name + " Price crossed the thresold Price Rs " + strconv.Itoa(int(alerts[i].AlertPrice)));
 	}
 }
@@ -59,15 +64,15 @@ func SendExchangeAlerts(exchange int, buy_price float64, sell_price float64) {
 	alerts := []models.Alert{};
 
 	db.Where("exchange_id = ?",exchange).Where("alert_price <= ?",buy_price2).Where("operator = ?",1).Where("price_type = ?",1).Find(&alerts);
-	go SendAlerts(db,alerts,exchange,buy_price2)
+	go SendAlerts(alerts,exchange,buy_price2)
 
 	db.Where("exchange_id = ?",exchange).Where("alert_price <= ?",sell_price2).Where("operator = ?",1).Where("price_type = ?",0).Find(&alerts);
-	go SendAlerts(db,alerts,exchange,sell_price2)
+	go SendAlerts(alerts,exchange,sell_price2)
 
 	db.Where("exchange_id = ?",exchange).Where("alert_price >= ?",buy_price2).Where("operator = ?",0).Where("price_type = ?",1).Find(&alerts);
-	go SendAlerts(db,alerts,exchange,buy_price2)
+	go SendAlerts(alerts,exchange,buy_price2)
 
 	db.Where("exchange_id = ?",exchange).Where("alert_price >= ?",sell_price2).Where("operator = ?",0).Where("price_type = ?",0).Find(&alerts);
-	go SendAlerts(db,alerts,exchange,sell_price2)
+	go SendAlerts(alerts,exchange,sell_price2)
 
 }
