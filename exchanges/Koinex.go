@@ -8,28 +8,22 @@ import (
 )
 
 type Koinex struct {
-	Buy_orders struct {
-		Data []struct {
-			Price_per_unit string
-		}
-	}
-	Sell_orders struct {
-		Data []struct {
-			Price_per_unit string
+	Stats struct {
+		BTC struct {
+			Lowest_ask string
+			Highest_bid string
 		}
 	}
 }
 
 func GetKoinexPrice(c *models.Client, price *controllers.BitcoinPrice) {
 	rsp := &Koinex{}
-	e := c.LoadResponse("GET","https://koinex.in/api/dashboards/order_history?page=1&per_page=13&target_currency=bitcoin",rsp)
+	e := c.LoadResponse("GET","https://koinex.in/api/ticker",rsp)
 	if(e != nil) {
 		fmt.Print(e)
 	} else {
-		if(len(rsp.Buy_orders.Data) > 0 && len(rsp.Sell_orders.Data) > 0) {
-			price.KoinexSellPrice,_ = strconv.ParseFloat(rsp.Buy_orders.Data[0].Price_per_unit,64);
-			price.KoinexBuyPrice,_ = strconv.ParseFloat(rsp.Sell_orders.Data[0].Price_per_unit,64);
-			controllers.SendExchangeAlerts(2,price.KoinexBuyPrice,price.KoinexSellPrice);
-		}
+			price.KoinexSellPrice,_ = strconv.ParseFloat(rsp.Stats.BTC.Highest_bid,64);
+			price.KoinexBuyPrice,_ = strconv.ParseFloat(rsp.Stats.BTC.Lowest_ask,64);
+			//controllers.SendExchangeAlerts(2,price.KoinexBuyPrice,price.KoinexSellPrice);
 	}
 }
