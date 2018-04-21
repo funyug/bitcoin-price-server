@@ -24,6 +24,6 @@ func GetKoinexPrice(c *models.Client, price *controllers.BitcoinPrice) {
 	} else {
 			price.KoinexSellPrice,_ = strconv.ParseFloat(rsp.Stats.BTC.Highest_bid,64);
 			price.KoinexBuyPrice,_ = strconv.ParseFloat(rsp.Stats.BTC.Lowest_ask,64);
-			//controllers.SendExchangeAlerts(2,price.KoinexBuyPrice,price.KoinexSellPrice);
+			controllers.SendExchangeAlerts(2,price.KoinexBuyPrice,price.KoinexSellPrice);
 	}
 }
